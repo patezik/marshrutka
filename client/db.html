@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>БД депо</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Rubik:wght@500;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root { --bg:#16171b; --card:#1f2026; --line:#30323a; --ink:#ece7dc; --muted:#8d909b; --amber:#ffb02e; --bad:#e05a5a; }
+      * { box-sizing: border-box; }
+      body { margin:0; background:var(--bg); color:var(--ink); font-family:Rubik,system-ui,sans-serif; }
+      .wrap { max-width:1400px; margin:0 auto; padding:18px 16px 40px; }
+      header { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+      h1 { margin:0 auto 0 0; font-size:20px; font-weight:800; }
+      h1 span { color:var(--amber); }
+      .muted { color:var(--muted); font-size:13px; }
+      button, label.tog { font:inherit; color:inherit; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:7px 14px; cursor:pointer; font-size:14px; display:inline-flex; align-items:center; gap:6px; }
+      button.on { border-color:var(--amber); color:var(--amber); }
+      .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+      .tabs b { font-family:'JetBrains Mono',monospace; color:var(--muted); font-weight:500; }
+      .box { background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:auto; max-height:62vh; }
+      table { border-collapse:collapse; width:100%; font:13px 'JetBrains Mono',monospace; }
+      th, td { padding:7px 10px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap; }
+      th { position:sticky; top:0; background:#26282f; color:var(--muted); font-weight:700; }
+      tr.new td { animation: flash 1.6s ease-out; }
+      @keyframes flash { from { background: rgba(255,176,46,.25); } }
+      td.num { text-align:right; }
+      td.neg { color:var(--bad); }
+      td.json { color:#9fc5e8; }
+      .empty { padding:30px; text-align:center; color:var(--muted); }
+      .sql { margin-top:22px; }
+      .sql h2 { font-size:15px; margin:0 0 8px; }
+      textarea { width:100%; min-height:90px; background:#101115; color:var(--ink); border:1px solid var(--line); border-radius:10px; padding:10px; font:14px 'JetBrains Mono',monospace; resize:vertical; }
+      .row { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
+      .err { color:var(--bad); font:13px 'JetBrains Mono',monospace; white-space:pre-wrap; margin:8px 0; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>БД <span>депо</span> <small class="muted">· только чтение, dev</small></h1>
+        <label class="tog"><input type="checkbox" id="auto" checked /> автообновление</label>
+        <button id="refresh">обновить</button>
+      </header>
+      <div class="tabs" id="tabs"></div>
+      <div class="box" id="table"><div class="empty">загрузка…</div></div>
+
+      <div class="sql">
+        <h2>SQL-запрос <span class="muted">(только SELECT, выполняется в read-only транзакции)</span></h2>
+        <div class="row" id="presets"></div>
+        <textarea id="q" spellcheck="false"></textarea>
+        <div class="row"><button id="run" class="on">выполнить (Ctrl+Enter)</button></div>
+        <div class="err" id="err"></div>
+        <div class="box" id="result"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/db.ts"></script>
+  </body>
+</html>
