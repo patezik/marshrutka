@@ -51,6 +51,9 @@ export async function initDb() {
   let kind;
   let stopLocal = async () => {};
   if (url) {
+    // Neon и др. дают sslmode=require: явно просим строгую проверку сертификата
+    // (это и так поведение pg 8, но без предупреждения в логах).
+    url = url.replace(/([?&])sslmode=(require|prefer|verify-ca)\b/, '$1sslmode=verify-full');
     kind = `postgres (${new URL(url).hostname})`;
   } else {
     if (!process.argv.includes('--dev')) {
